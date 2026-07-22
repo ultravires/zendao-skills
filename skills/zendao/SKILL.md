@@ -16,8 +16,17 @@ description: >-
 
 ## 前置条件
 
-1. 已安装 Node.js（建议 18+）
-2. 在**当前工作目录**准备 `.env.local` 或 `.env`：
+已安装 Node.js（建议 18+）。脚本从**当前工作目录**读取 `.env.local` 或 `.env`（不是技能目录）。
+
+## 首次配置（缺失时必做）
+
+在执行任何业务脚本前，先完成下列检查；配置缺失时不要猜测默认地址或账号，必须先引导用户写好文件。
+
+1. **检查**：在 cwd 查找 `.env.local` 或 `.env`，确认至少具备：
+   - `ZENDAO_API_BASE_URL`（禅道 REST API 根路径，形如 `https://host/api.php/v1`）
+   - `ZENDAO_ACCOUNT` + `ZENDAO_PASSWORD`（或已可用的 `ZENDAO_TOKEN`）
+2. **询问**：若文件不存在或必填项为空，向用户索取 API 地址、账号、密码（Token 可选）。不要在回复中回显密码。
+3. **写入**：在 cwd 创建或更新 `.env.local`（优先于 `.env`）：
 
 ```bash
 ZENDAO_API_BASE_URL=https://your-zendao-host/api.php/v1
@@ -27,9 +36,12 @@ ZENDAO_PASSWORD=your-password
 ZENDAO_TOKEN=
 ```
 
+4. **验证**：执行 `node dist/token/getToken.mjs`（在技能根目录下，或以绝对路径指向该文件）。成功后再继续业务操作；失败则请用户核对地址与账号后重试。
+5. **安全**：提醒用户勿将 `.env` / `.env.local` 提交到 Git；凭证只写本地文件。
+
 ## 工作流
 
-1. 确认环境变量已配置
+1. 按「首次配置」确认环境可用（已配置则跳过询问）
 2. 按用户意图选择对应脚本（见下方速查表）
 3. 用 `node dist/...` 执行（在技能根目录下，或以绝对路径指向 `dist`）；参数不足时脚本会打印用法
 4. 结果为 stdout 上的 JSON；向用户总结关键字段，必要时再跟进查询

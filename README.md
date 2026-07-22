@@ -8,7 +8,7 @@
 npx skills add ultravires/zendao-skills
 ```
 
-安装后使用 `skills/zendao` 目录下的 `node dist/...` 脚本操作禅道 API（详见技能内 `SKILL.md`）。
+安装后，Agent 会按技能说明检查当前工作目录的 `.env.local` / `.env`；缺失时会询问禅道 API 地址与账号密码并写入配置，再用 `skills/zendao` 下的 `node dist/...` 脚本调用 API（详见 `SKILL.md`）。
 
 ### 开发
 
