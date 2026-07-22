@@ -1,7 +1,7 @@
-import '../../../src/index.js';
-import { getToken } from '../../../src/api/token/index.js';
-import { setToken } from '../../../src/api/client.js';
-import { getProducts } from '../../../src/api/product/index.js';
+import '../../../../src/index.js';
+import { getToken } from '../../../../src/api/token/index.js';
+import { setToken } from '../../../../src/api/client.js';
+import { getProducts } from '../../../../src/api/product/index.js';
 
 const main = async () => {
   const { token } = await getToken(

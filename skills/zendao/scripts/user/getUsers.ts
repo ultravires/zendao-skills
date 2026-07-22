@@ -1,7 +1,7 @@
-import '../../../src/index.js';
-import { getToken } from '../../../src/api/token/index.js';
-import { setToken } from '../../../src/api/client.js';
-import { getUsers } from '../../../src/api/user/index.js';
+import '../../../../src/index.js';
+import { getToken } from '../../../../src/api/token/index.js';
+import { setToken } from '../../../../src/api/client.js';
+import { getUsers } from '../../../../src/api/user/index.js';
 
 const main = async () => {
   const page = process.argv[2] || '1';

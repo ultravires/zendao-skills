@@ -1,7 +1,7 @@
-import '../../../src/index.js';
-import { getToken } from '../../../src/api/token/index.js';
-import { setToken } from '../../../src/api/client.js';
-import { getPrograms } from '../../../src/api/program/index.js';
+import '../../../../src/index.js';
+import { getToken } from '../../../../src/api/token/index.js';
+import { setToken } from '../../../../src/api/client.js';
+import { getPrograms } from '../../../../src/api/program/index.js';
 
 const main = async () => {
   const order = process.argv[2];

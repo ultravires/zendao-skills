@@ -1,12 +1,12 @@
-import '../../../src/index.js';
-import { getToken } from '../../../src/api/token/index.js';
-import { setToken } from '../../../src/api/client.js';
-import { deleteTask } from '../../../src/api/task/index.js';
+import '../../../../src/index.js';
+import { getToken } from '../../../../src/api/token/index.js';
+import { setToken } from '../../../../src/api/client.js';
+import { deleteTask } from '../../../../src/api/task/index.js';
 
 const main = async () => {
   const taskId = process.argv[2];
   if (!taskId) {
-    console.error('用法: pnpm tsx skills/scripts/task/deleteTask.ts <taskId>');
+    console.error('用法: node dist/task/deleteTask.mjs <taskId>');
     process.exit(1);
   }
 

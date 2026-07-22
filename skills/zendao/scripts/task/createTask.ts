@@ -1,11 +1,11 @@
-import '../../../src/index.js';
-import { getToken } from '../../../src/api/token/index.js';
-import { setToken } from '../../../src/api/client.js';
-import { createTask } from '../../../src/api/task/index.js';
-import type { CreateTaskBody } from '../../../src/api/types.js';
+import '../../../../src/index.js';
+import { getToken } from '../../../../src/api/token/index.js';
+import { setToken } from '../../../../src/api/client.js';
+import { createTask } from '../../../../src/api/task/index.js';
+import type { CreateTaskBody } from '../../../../src/api/types.js';
 
 const usage =
-  '用法: pnpm tsx skills/scripts/task/createTask.ts <executionId> \'<jsonBody>\'';
+  '用法: node dist/task/createTask.mjs <executionId> \'<jsonBody>\'';
 
 const main = async () => {
   const executionId = process.argv[2];
@@ -13,7 +13,7 @@ const main = async () => {
   if (!executionId || !bodyRaw) {
     console.error(usage);
     console.error(
-      '示例: pnpm tsx skills/scripts/task/createTask.ts 55 \'{"name":"test","assignedTo":["admin"],"type":"devel","estStarted":"2021-12-01","deadline":"2021-12-31"}\'',
+      '示例: node dist/task/createTask.mjs 55 \'{"name":"test","assignedTo":["admin"],"type":"devel","estStarted":"2021-12-01","deadline":"2021-12-31"}\'',
     );
     process.exit(1);
   }

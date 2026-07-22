@@ -1,12 +1,12 @@
-import '../../../src/index.js';
-import { getToken } from '../../../src/api/token/index.js';
-import { setToken } from '../../../src/api/client.js';
-import { getUser } from '../../../src/api/user/index.js';
+import '../../../../src/index.js';
+import { getToken } from '../../../../src/api/token/index.js';
+import { setToken } from '../../../../src/api/client.js';
+import { getUser } from '../../../../src/api/user/index.js';
 
 const main = async () => {
   const userId = process.argv[2];
   if (!userId) {
-    console.error('用法: pnpm tsx skills/scripts/user/getUser.ts <userId>');
+    console.error('用法: node dist/user/getUser.mjs <userId>');
     process.exit(1);
   }
 
