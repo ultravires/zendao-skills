@@ -425,6 +425,368 @@ export interface GetProgramsResponse {
 /** 根据项目集 ID 获取项目集详情响应 */
 export type GetProgramResponse = Program;
 
+/** 创建项目集请求体 */
+export interface CreateProgramBody {
+  /** 项目集名称 */
+  name?: string;
+  /** 父项目集，0 表示没有父项目集 */
+  parent?: number | string;
+  /** 项目负责人（用户 ID 或账号） */
+  PM?: number | string;
+  /** 预算金额 */
+  budget?: number;
+  /** 预算币种 */
+  budgetUnit?: BudgetUnit | string;
+  /** 项目集描述 */
+  desc?: string;
+  /** 预计开始日期 */
+  begin?: string;
+  /** 预计结束日期 */
+  end?: string;
+  /** 访问控制 */
+  acl?: ProgramAcl | string;
+  /** 白名单（仅 acl = private 时生效） */
+  whitelist?: unknown[];
+}
+
+/** 创建项目集响应 */
+export type CreateProgramResponse = Program;
+
+/** 修改项目集请求体 */
+export interface UpdateProgramBody {
+  /** 项目集名称 */
+  name?: string;
+  /** 父项目集，0 表示没有父项目集 */
+  parent?: number | string;
+  /** 项目负责人（用户 ID 或账号） */
+  PM?: number | string;
+  /** 预算金额 */
+  budget?: number;
+  /** 预算币种 */
+  budgetUnit?: BudgetUnit | string;
+  /** 项目集描述 */
+  desc?: string;
+  /** 预计开始日期 */
+  begin?: string;
+  /** 预计结束日期 */
+  end?: string;
+  /** 访问控制 */
+  acl?: ProgramAcl | string;
+  /** 白名单 */
+  whitelist?: unknown[];
+}
+
+/** 修改项目集响应 */
+export type UpdateProgramResponse = Program;
+
+/** 删除项目集响应 */
+export interface DeleteProgramResponse {
+  message: string;
+}
+
+/** 项目模型 */
+export type ProjectModel = 'scrum' | 'waterfall';
+
+/** 项目状态 */
+export type ProjectStatus = 'wait' | 'doing' | 'suspend' | 'suspended' | 'closed';
+
+/** 项目访问控制 */
+export type ProjectAcl = 'open' | 'private';
+
+/** 项目权限控制 */
+export type ProjectAuth = 'extend' | 'reset';
+
+/** 项目 */
+export interface Project {
+  id: number;
+  model: ProjectModel | string;
+  type: string;
+  lifetime: string;
+  budget: string | number;
+  budgetUnit: BudgetUnit | string;
+  attribute: string;
+  percent: number;
+  milestone: string;
+  output: string;
+  auth: string;
+  parent: number;
+  path: string;
+  grade: number;
+  name: string;
+  code: string;
+  begin: string;
+  end: string;
+  realBegan: string | null;
+  realEnd: string | null;
+  days: number;
+  status: ProjectStatus | string;
+  subStatus: string;
+  pri: string;
+  desc: string;
+  version: number;
+  parentVersion: number;
+  planDuration: number;
+  realDuration: number;
+  openedBy: ZenTaoUser | string;
+  openedDate: string;
+  openedVersion: string;
+  lastEditedBy: ZenTaoUser | string;
+  lastEditedDate: string | null;
+  closedBy: ZenTaoUser | string | null;
+  closedDate: string | null;
+  canceledBy: ZenTaoUser | string | null;
+  canceledDate: string | null;
+  PO: ZenTaoUser | string | null;
+  PM: ZenTaoUser | string | null;
+  QD: ZenTaoUser | string | null;
+  RD: ZenTaoUser | string | null;
+  team: string;
+  acl: ProjectAcl | string;
+  whitelist: unknown;
+  order: number;
+  deleted: boolean | string;
+  progress?: number;
+}
+
+/** 获取项目列表查询参数 */
+export interface GetProjectsParams {
+  /** 第几页，默认 1 */
+  page?: number | string;
+  /** 每页项目数量，默认 20 */
+  limit?: number | string;
+}
+
+/** 获取项目列表响应 */
+export interface GetProjectsResponse {
+  page: number;
+  total: number;
+  limit: number;
+  projects: Project[];
+}
+
+/** 根据项目 ID 获取项目详情响应 */
+export type GetProjectResponse = Project;
+
+/** 创建项目请求体 */
+export interface CreateProjectBody {
+  /** 项目名称 */
+  name: string;
+  /** 项目编号 */
+  code: string;
+  /** 计划开始日期 */
+  begin: string;
+  /** 计划结束日期 */
+  end: string;
+  /** 关联产品 ID 数组，不能为空 */
+  products: number[];
+  /** 项目模型，默认 scrum */
+  model?: ProjectModel | string;
+  /** 所属项目集，默认 0 */
+  parent?: number;
+}
+
+/** 创建项目响应 */
+export type CreateProjectResponse = Project;
+
+/** 修改项目请求体 */
+export interface UpdateProjectBody {
+  /** 项目名称 */
+  name?: string;
+  /** 项目代号 */
+  code?: string;
+  /** 所属项目集 */
+  parent?: number;
+  /** 项目负责人（用户 ID 或账号） */
+  PM?: number | string;
+  /** 项目预算金额 */
+  budget?: number;
+  /** 预算币种 */
+  budgetUnit?: BudgetUnit | string;
+  /** 可用工作日 */
+  days?: number;
+  /** 项目描述 */
+  desc?: string;
+  /** 访问控制 */
+  acl?: ProjectAcl | string;
+  /** 白名单 */
+  whitelist?: unknown[];
+  /** 权限控制 */
+  auth?: ProjectAuth | string;
+}
+
+/** 修改项目响应 */
+export type UpdateProjectResponse = Project;
+
+/** 删除项目响应 */
+export interface DeleteProjectResponse {
+  message: string;
+}
+
+/** 执行状态 */
+export type ExecutionStatus = 'wait' | 'doing' | 'suspended' | 'closed' | 'done';
+
+/** 执行类型 */
+export type ExecutionLifetime = 'short' | 'long' | 'ops';
+
+/** 执行访问控制 */
+export type ExecutionAcl = 'private' | 'open';
+
+/** 执行（迭代 / sprint） */
+export interface Execution {
+  id: number;
+  project: number;
+  model?: string;
+  type: string;
+  lifetime?: ExecutionLifetime | string;
+  budget?: string | number;
+  budgetUnit?: BudgetUnit | string;
+  attribute?: string;
+  percent?: number;
+  milestone?: string;
+  output?: string;
+  auth?: string;
+  parent: number;
+  path?: string;
+  grade?: number;
+  name: string;
+  code: string;
+  begin: string;
+  end: string;
+  realBegan?: string | null;
+  realEnd?: string | null;
+  days?: number;
+  status: ExecutionStatus | string;
+  subStatus?: string;
+  pri?: string;
+  desc?: string;
+  version?: number;
+  parentVersion?: number;
+  planDuration?: number;
+  realDuration?: number;
+  openedBy: ZenTaoUser | string;
+  openedDate: string;
+  openedVersion?: string;
+  lastEditedBy?: ZenTaoUser | string;
+  lastEditedDate?: string | null;
+  closedBy?: ZenTaoUser | string | null;
+  closedDate?: string | null;
+  canceledBy?: ZenTaoUser | string | null;
+  canceledDate?: string | null;
+  PO?: ZenTaoUser | string | null;
+  PM?: ZenTaoUser | string | null;
+  QD?: ZenTaoUser | string | null;
+  RD?: ZenTaoUser | string | null;
+  team?: string;
+  teamMembers?: string[];
+  acl?: ExecutionAcl | string;
+  whitelist?: unknown;
+  order?: number;
+  deleted?: boolean | string;
+  totalHours?: number;
+  totalEstimate?: number;
+  totalConsumed?: number;
+  totalLeft?: number;
+  progress?: number;
+}
+
+/** 获取项目执行列表查询参数 */
+export interface GetExecutionsParams {
+  /** 第几页，默认 1 */
+  page?: number | string;
+  /** 每页执行数量，默认 20 */
+  limit?: number | string;
+}
+
+/** 获取项目执行列表响应 */
+export interface GetExecutionsResponse {
+  page: number;
+  total: number;
+  limit: number;
+  executions: Execution[];
+}
+
+/** 创建执行请求体 */
+export interface CreateExecutionBody {
+  /** 执行名称 */
+  name: string;
+  /** 执行代号 */
+  code: string;
+  /** 计划开始日期 */
+  begin: string;
+  /** 计划结束日期 */
+  end: string;
+  /** 所属项目（一般由路径参数提供，可选传） */
+  project?: number;
+  /** 可用工作日 */
+  days?: number;
+  /** 类型：short 短期 | long 长期 | ops 运维 */
+  lifetime?: ExecutionLifetime | string;
+  /** 产品负责人 */
+  PO?: string;
+  /** 迭代负责人 */
+  PM?: string;
+  /** 测试负责人 */
+  QD?: string;
+  /** 发布负责人 */
+  RD?: string;
+  /** 团队成员账号数组 */
+  teamMembers?: string[];
+  /** 迭代描述 */
+  desc?: string;
+  /** 访问控制：private 私有 | open 继承项目权限 */
+  acl?: ExecutionAcl | string;
+  /** 白名单 */
+  whitelist?: unknown[];
+}
+
+/** 创建执行响应 */
+export type CreateExecutionResponse = Execution;
+
+/** 获取执行详情响应 */
+export type GetExecutionResponse = Execution;
+
+/** 修改执行请求体 */
+export interface UpdateExecutionBody {
+  /** 所属项目 */
+  project: number;
+  /** 执行名称 */
+  name: string;
+  /** 执行代号 */
+  code: string;
+  /** 计划开始日期 */
+  begin: string;
+  /** 计划结束日期 */
+  end: string;
+  /** 可用工作日 */
+  days?: number;
+  /** 类型：short 短期 | long 长期 | ops 运维 */
+  lifetime?: ExecutionLifetime | string;
+  /** 产品负责人 */
+  PO?: string;
+  /** 迭代负责人 */
+  PM?: string;
+  /** 测试负责人 */
+  QD?: string;
+  /** 发布负责人 */
+  RD?: string;
+  /** 团队成员账号数组 */
+  teamMembers?: string[];
+  /** 迭代描述 */
+  desc?: string;
+  /** 访问控制：private 私有 | open 继承项目权限 */
+  acl?: ExecutionAcl | string;
+  /** 白名单，acl = private 时生效 */
+  whitelist?: unknown[];
+}
+
+/** 修改执行响应 */
+export type UpdateExecutionResponse = Execution;
+
+/** 删除执行响应 */
+export interface DeleteExecutionResponse {
+  message: string;
+}
+
 /** Bug 类型 */
 export type BugType =
   | 'codeerror'
@@ -519,6 +881,487 @@ export interface GetBugsResponse {
   total: number;
   limit: number;
   bugs: Bug[];
+}
+
+/** Bug 详情（含关联名称、附件等完整信息） */
+export interface BugDetail
+  extends Omit<Bug, 'status' | 'deadline' | 'resolvedDate' | 'closedDate'> {
+  status: 'active' | 'resolved' | 'closed' | string;
+  deadline: string | null;
+  resolvedDate: string | null;
+  closedDate: string | null;
+  executionName: string;
+  storyTitle: string | null;
+  storyStatus: string | null;
+  latestStoryVersion: number | null;
+  taskName: string | null;
+  planName: string | null;
+  projectName: string | null;
+  toCases: unknown[];
+  files: unknown[];
+}
+
+/** 获取 Bug 详情响应 */
+export type GetBugResponse = BugDetail;
+
+/** 创建 Bug 请求体 */
+export interface CreateBugBody {
+  /** Bug 标题 */
+  title: string;
+  /** 严重程度 */
+  severity: number;
+  /** 优先级 */
+  pri: number;
+  /** Bug 类型 */
+  type: Exclude<BugType, ''> | string;
+  /** 所属分支 */
+  branch?: number;
+  /** 所属模块 */
+  module?: number;
+  /** 所属执行 */
+  execution?: number;
+  /** 关键词 */
+  keywords?: string;
+  /** 操作系统 */
+  os?: string;
+  /** 浏览器 */
+  browser?: string;
+  /** 重现步骤 */
+  steps?: string;
+  /** 相关任务 */
+  task?: number;
+  /** 相关需求 */
+  story?: number;
+  /** 截止日期 */
+  deadline?: string;
+  /** 影响版本 */
+  openedBuild?: string[];
+}
+
+/** 创建 Bug 响应 */
+export type CreateBugResponse = Bug;
+
+/** 修改 Bug 请求体 */
+export interface UpdateBugBody {
+  /** Bug 标题 */
+  title: string;
+  /** 严重程度 */
+  severity: number;
+  /** 优先级 */
+  pri: number;
+  /** Bug 类型 */
+  type: Exclude<BugType, ''> | string;
+  /** 所属分支 */
+  branch?: number;
+  /** 所属模块 */
+  module?: number;
+  /** 所属执行 */
+  execution?: number;
+  /** 关键词 */
+  keywords?: string;
+  /** 操作系统 */
+  os?: string;
+  /** 浏览器 */
+  browser?: string;
+  /** 重现步骤 */
+  steps?: string;
+  /** 相关任务 */
+  task?: number;
+  /** 相关需求 */
+  story?: number;
+  /** 截止日期 */
+  deadline?: string;
+  /** 影响版本 */
+  openedBuild?: string[];
+}
+
+/** 修改 Bug 响应 */
+export type UpdateBugResponse = Bug;
+
+/** 删除 Bug 响应 */
+export interface DeleteBugResponse {
+  message: string;
+}
+
+/** 用例类型 */
+export type TestCaseType =
+  | 'feature'
+  | 'performance'
+  | 'config'
+  | 'install'
+  | 'security'
+  | 'interface'
+  | 'unit'
+  | 'other';
+
+/** 用例适用阶段 */
+export type TestCaseStage =
+  | 'unittest'
+  | 'feature'
+  | 'intergrate'
+  | 'system'
+  | 'smoke'
+  | 'bvt'
+  | '';
+
+/** 用例状态 */
+export type TestCaseStatus = 'wait' | 'normal' | 'blocked' | 'investigate';
+
+/** 产品下的用例 */
+export interface TestCase {
+  id: number;
+  project: number;
+  product: number;
+  execution: number;
+  branch: number;
+  lib: number;
+  module: number;
+  path: number;
+  story: number;
+  storyVersion: number;
+  title: string;
+  precondition: string;
+  keywords: string;
+  pri: number;
+  type: TestCaseType | string;
+  auto: string;
+  frame: string;
+  stage: TestCaseStage | string;
+  howRun: string;
+  scriptedBy: string;
+  scriptedDate: string | null;
+  scriptStatus: string;
+  scriptLocation: string;
+  status: TestCaseStatus | string;
+  subStatus: string;
+  color: string;
+  frequency: string;
+  order: number;
+  openedBy: ZenTaoUser;
+  openedDate: string;
+  reviewedBy: ZenTaoUser | null;
+  reviewedDate: string | null;
+  lastEditedBy: ZenTaoUser | null;
+  lastEditedDate: string | null;
+  version: number;
+  linkCase: string;
+  fromBug: number;
+  fromCaseID: number;
+  fromCaseVersion: number;
+  deleted: boolean;
+  lastRunner: string;
+  lastRunDate: string | null;
+  lastRunResult: string;
+  storyTitle: string | null;
+  needconfirm: boolean;
+  bugs: number;
+  results: number;
+  caseFails: number;
+  stepNumber: number;
+  statusName: string;
+}
+
+/** 获取产品用例列表查询参数 */
+export interface GetTestcasesParams {
+  page?: number | string;
+  limit?: number | string;
+}
+
+/** 获取产品用例列表响应 */
+export interface GetTestcasesResponse {
+  page: number;
+  total: number;
+  limit: number;
+  testcases: TestCase[];
+}
+
+/** 用例步骤（创建请求） */
+export interface TestCaseStepInput {
+  /** 步骤描述 */
+  desc: string;
+  /** 期望结果 */
+  expect: string;
+}
+
+/** 用例步骤详情 */
+export interface TestCaseStep {
+  id: number;
+  parent: number;
+  case: number;
+  version: number;
+  type: string;
+  desc: string;
+  expect: string;
+}
+
+/** 创建用例请求体 */
+export interface CreateTestcaseBody {
+  /** 用例标题 */
+  title: string;
+  /** 用例类型 */
+  type: TestCaseType | string;
+  /** 用例步骤 */
+  steps: TestCaseStepInput[];
+  /** 所属分支 */
+  branch?: number;
+  /** 所属模块 */
+  module?: number;
+  /** 所属需求 */
+  story?: number;
+  /** 适用阶段 */
+  stage?: Exclude<TestCaseStage, ''> | string;
+  /** 前置条件 */
+  precondition?: string;
+  /** 优先级 */
+  pri?: number;
+  /** 关键词 */
+  keywords?: string;
+}
+
+/** 用例详情（含步骤、附件等完整信息） */
+export interface TestCaseDetail extends TestCase {
+  steps: TestCaseStep[];
+  files: unknown[];
+  currentVersion: number;
+  toBugs: unknown[];
+}
+
+/** 获取用例详情响应 */
+export type GetTestcaseResponse = TestCaseDetail;
+
+/** 创建用例响应 */
+export type CreateTestcaseResponse = TestCaseDetail;
+
+/** 修改用例请求体 */
+export interface UpdateTestcaseBody {
+  /** 所属分支 */
+  branch?: number;
+  /** 所属模块 */
+  module?: number;
+  /** 所属需求 */
+  story?: number;
+  /** 用例标题 */
+  title?: string;
+  /** 用例类型 */
+  type?: TestCaseType | string;
+  /** 适用阶段 */
+  stage?: Exclude<TestCaseStage, ''> | string;
+  /** 前置条件 */
+  precondition?: string;
+  /** 优先级 */
+  pri?: number;
+  /** 用例步骤 */
+  steps?: Array<Partial<TestCaseStepInput>>;
+  /** 关键词 */
+  keywords?: string;
+}
+
+/** 修改用例响应 */
+export type UpdateTestcaseResponse = TestCaseDetail;
+
+/** 删除用例响应 */
+export interface DeleteTestcaseResponse {
+  message: string;
+}
+
+/** 需求来源 */
+export type StorySource =
+  | 'customer'
+  | 'user'
+  | 'po'
+  | 'market'
+  | string;
+
+/** 需求类型 */
+export type StoryCategory =
+  | 'feature'
+  | 'interface'
+  | 'performance'
+  | 'safe'
+  | 'experience'
+  | 'improve'
+  | 'other'
+  | string;
+
+/** 需求阶段 */
+export type StoryStage =
+  | 'wait'
+  | 'planned'
+  | 'projected'
+  | 'developing'
+  | 'developed'
+  | 'testing'
+  | 'tested'
+  | 'verified'
+  | 'released'
+  | 'closed'
+  | string;
+
+/** 需求状态 */
+export type StoryStatus = 'draft' | 'active' | 'closed' | 'changed' | string;
+
+/** 需求（产品/项目列表共用） */
+export interface Story {
+  id: number;
+  parent: number;
+  product: number;
+  branch: number;
+  module: number;
+  plan: string;
+  source: StorySource;
+  sourceNote: string;
+  fromBug: number;
+  title: string;
+  keywords: string;
+  type: string;
+  category: StoryCategory;
+  pri: number;
+  estimate: number;
+  status: StoryStatus;
+  subStatus: string;
+  color: string;
+  stage: StoryStage;
+  stagedBy: string;
+  mailto: string;
+  openedBy: ZenTaoUser | string;
+  openedDate: string;
+  assignedTo: ZenTaoUser | string;
+  assignedDate: string;
+  lastEditedBy: ZenTaoUser | string;
+  lastEditedDate: string | null;
+  reviewedBy: ZenTaoUser | string;
+  reviewedDate: string | null;
+  closedBy: ZenTaoUser | string;
+  closedDate: string | null;
+  closedReason: string;
+  toBug: number;
+  childStories: string;
+  linkStories: string;
+  duplicateStory: number;
+  version: number;
+  URChanged: string;
+  deleted: boolean;
+  planTitle: string;
+}
+
+/** 获取需求列表查询参数（产品/项目/执行共用） */
+export interface GetStoriesParams {
+  /** 第几页，默认 1 */
+  page?: number | string;
+  /** 每页需求数量，默认 20 */
+  limit?: number | string;
+}
+
+/** 获取需求列表响应（产品/项目/执行共用） */
+export interface GetStoriesResponse {
+  page: number;
+  total: number;
+  limit: number;
+  stories: Story[];
+}
+
+/** 需求关联的执行摘要 */
+export interface StoryExecutionSummary {
+  project: number;
+  name: string;
+  status: string;
+}
+
+/** 需求关联的任务摘要 */
+export interface StoryTaskSummary {
+  id: number;
+  name: string;
+  assignedTo: string;
+  execution: number;
+  status: string;
+  consumed: number;
+  left: number;
+  type: string;
+}
+
+/** 需求详情（变更等写接口返回） */
+export interface StoryDetail
+  extends Omit<Story, 'assignedDate' | 'planTitle' | 'deleted'> {
+  assignedDate: string | null;
+  deleted: string | boolean;
+  /** 需求描述 */
+  spec: string;
+  /** 验收标准 */
+  verify: string;
+  executions: Record<string, StoryExecutionSummary>;
+  tasks: Record<string, StoryTaskSummary[]>;
+  stages: unknown[];
+  planTitle: Record<string, string> | string;
+  children: unknown[];
+}
+
+/** 创建需求请求体 */
+export interface CreateStoryBody {
+  /** 需求标题 */
+  title: string;
+  /** 所属产品 */
+  product: number;
+  /** 优先级 */
+  pri: number;
+  /** 需求类型 */
+  category: StoryCategory;
+  /** 需求描述 */
+  spec?: string;
+  /** 验收标准 */
+  verify?: string;
+  /** 需求来源 */
+  source?: StorySource;
+  /** 来源备注 */
+  sourceNote?: string;
+  /** 预计工时 */
+  estimate?: number;
+  /** 关键词 */
+  keywords?: string;
+}
+
+/** 获取需求详情响应 */
+export type GetStoryResponse = StoryDetail;
+
+/** 创建需求响应 */
+export type CreateStoryResponse = StoryDetail;
+
+/** 变更需求请求体 */
+export interface ChangeStoryBody {
+  /** 需求标题 */
+  title?: string;
+  /** 需求描述 */
+  spec?: string;
+  /** 验收标准 */
+  verify?: string;
+}
+
+/** 变更需求响应 */
+export type ChangeStoryResponse = StoryDetail;
+
+/** 修改需求其他字段请求体 */
+export interface UpdateStoryBody {
+  /** 所属模块 */
+  module?: number;
+  /** 需求来源 */
+  source?: StorySource;
+  /** 来源备注 */
+  sourceNote?: string;
+  /** 优先级 */
+  pri?: number;
+  /** 需求类型 */
+  category?: StoryCategory;
+  /** 预计工时 */
+  estimate?: number;
+  /** 关键词 */
+  keywords?: string;
+}
+
+/** 修改需求其他字段响应 */
+export type UpdateStoryResponse = StoryDetail;
+
+/** 删除需求响应 */
+export interface DeleteStoryResponse {
+  message: string;
 }
 
 /** 产品类型 */

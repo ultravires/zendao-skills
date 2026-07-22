@@ -1,9 +1,10 @@
 ---
 name: zendao
 description: >-
-  Query and manage ZenTao (禅道) programs, products, tasks, bugs, and users via
-  bundled CLI scripts. Use when the user mentions 禅道, ZenTao, Zendao, 项目集,
-  执行/execution, 任务, Bug, 产品, or needs to list/create/update/delete ZenTao
+  Query and manage ZenTao (禅道) programs, projects, products, stories,
+  tasks, bugs, testcases, and users via bundled CLI scripts. Use when the user
+  mentions 禅道, ZenTao, Zendao, 项目集, 项目, 执行/execution, 需求/story, 任务,
+  Bug, 用例, 测试用例, 产品, or needs to list/create/update/delete ZenTao
   entities through this project's API scripts.
 ---
 
@@ -33,7 +34,7 @@ ZENDAO_TOKEN=
 3. 用 `node dist/...` 执行（在技能根目录下，或以绝对路径指向 `dist`）；参数不足时脚本会打印用法
 4. 结果为 stdout 上的 JSON；向用户总结关键字段，必要时再跟进查询
 
-**写操作（创建 / 修改 / 删除）前**：确认目标 ID、指派人账号、日期等关键参数；删除任务需先向用户确认。
+**写操作（创建 / 修改 / 删除）前**：确认目标 ID、指派人账号、日期等关键参数；删除任务 / 需求 / 项目 / 项目集需先向用户确认。
 
 ## 脚本速查
 
@@ -45,8 +46,38 @@ ZENDAO_TOKEN=
 | 用户详情 | `node dist/user/getUser.mjs <userId>` |
 | 项目集列表 | `node dist/program/getPrograms.mjs [order]` |
 | 项目集详情 | `node dist/program/getProgram.mjs <programId>` |
+| 创建项目集 | `node dist/program/createProgram.mjs '<jsonBody>'` |
+| 修改项目集 | `node dist/program/updateProgram.mjs <programId> '<jsonBody>'` |
+| 删除项目集 | `node dist/program/deleteProgram.mjs <programId>` |
+| 项目列表 | `node dist/project/getProjects.mjs [page] [limit]` |
+| 项目详情 | `node dist/project/getProject.mjs <projectId>` |
+| 创建项目 | `node dist/project/createProject.mjs '<jsonBody>'` |
+| 修改项目 | `node dist/project/updateProject.mjs <projectId> '<jsonBody>'` |
+| 删除项目 | `node dist/project/deleteProject.mjs <projectId>` |
+| 产品需求列表 | `node dist/story/getProductStories.mjs <productId> [page] [limit]` |
+| 项目需求列表 | `node dist/story/getStories.mjs <projectId> [page] [limit]` |
+| 执行需求列表 | `node dist/story/getExecutionStories.mjs <executionId> [page] [limit]` |
+| 需求详情 | `node dist/story/getStory.mjs <storyId>` |
+| 创建需求 | `node dist/story/createStory.mjs '<jsonBody>'` |
+| 变更需求 | `node dist/story/changeStory.mjs <storyId> '<jsonBody>'` |
+| 修改需求 | `node dist/story/updateStory.mjs <storyId> '<jsonBody>'` |
+| 删除需求 | `node dist/story/deleteStory.mjs <storyId>` |
+| 项目执行列表 | `node dist/execution/getExecutions.mjs <projectId> [page] [limit]` |
+| 执行详情 | `node dist/execution/getExecution.mjs <executionId>` |
+| 创建执行 | `node dist/execution/createExecution.mjs <projectId> '<jsonBody>'` |
+| 修改执行 | `node dist/execution/updateExecution.mjs <executionId> '<jsonBody>'` |
+| 删除执行 | `node dist/execution/deleteExecution.mjs <executionId>` |
 | 产品列表 | `node dist/product/getProducts.mjs` |
+| 产品用例列表 | `node dist/testcase/getTestcases.mjs <productId> [page] [limit]` |
+| 用例详情 | `node dist/testcase/getTestcase.mjs <testcaseId>` |
+| 创建用例 | `node dist/testcase/createTestcase.mjs <productId> '<jsonBody>'` |
+| 修改用例 | `node dist/testcase/updateTestcase.mjs <testcaseId> '<jsonBody>'` |
+| 删除用例 | `node dist/testcase/deleteTestcase.mjs <testcaseId>` |
 | 产品 Bug 列表 | `node dist/bug/getBugs.mjs <productId>` |
+| Bug 详情 | `node dist/bug/getBug.mjs <bugId>` |
+| 创建 Bug | `node dist/bug/createBug.mjs <productId> '<jsonBody>'` |
+| 修改 Bug | `node dist/bug/updateBug.mjs <bugId> '<jsonBody>'` |
+| 删除 Bug | `node dist/bug/deleteBug.mjs <bugId>` |
 | 执行下任务列表 | `node dist/task/getTasks.mjs <executionId>` |
 | 任务详情 | `node dist/task/getTask.mjs <taskId>` |
 | 创建任务 | `node dist/task/createTask.mjs <executionId> '<jsonBody>'` |
@@ -54,6 +85,106 @@ ZENDAO_TOKEN=
 | 删除任务 | `node dist/task/deleteTask.mjs <taskId>` |
 
 `order` 格式：`字段_asc` / `字段_desc`（默认 `order_asc`）。
+
+## 创建项目集 JSON
+
+字段均为可选。
+
+可选：`name`、`parent`（父项目集，`0` 表示无）、`PM`、`budget`、`budgetUnit`（`CNY` | `USD`）、`desc`、`begin`、`end`、`acl`（`open` | `private`）、`whitelist`（仅 `acl = private` 时生效）。
+
+```bash
+node dist/program/createProgram.mjs '{"name":"项目集21","begin":"2021-09-11","end":"2021-12-31"}'
+```
+
+## 修改项目集 JSON
+
+字段均为可选，传需要更新的子集即可。
+
+可选：`name`、`parent`（父项目集，`0` 表示无）、`PM`、`budget`、`budgetUnit`（`CNY` | `USD`）、`desc`、`begin`、`end`、`acl`（`open` | `private`）、`whitelist`。
+
+```bash
+node dist/program/updateProgram.mjs 12 '{"name":"项目集","PM":"admin"}'
+```
+
+## 创建项目 JSON
+
+必填：`name`、`code`、`begin`、`end`、`products`（产品 ID 数组，不能为空）。
+
+可选：`model`（默认 `scrum`）、`parent`（所属项目集，默认 `0`）。
+
+`model` 取值：`scrum` | `waterfall`。
+
+```bash
+node dist/project/createProject.mjs '{"name":"test","code":"test","begin":"2021-01-01","end":"2022-01-01","products":[1]}'
+```
+
+## 修改项目 JSON
+
+字段均为可选，传需要更新的子集即可。
+
+可选：`name`、`code`、`parent`、`PM`、`budget`、`budgetUnit`（`CNY` | `USD`）、`days`、`desc`、`acl`（`open` | `private`）、`whitelist`、`auth`（`extend` | `reset`）。
+
+```bash
+node dist/project/updateProject.mjs 12 '{"name":"修改项目","PM":"admin"}'
+```
+
+## 创建执行 JSON
+
+必填：`name`、`code`、`begin`、`end`。
+
+可选：`days`、`lifetime`（`short` | `long` | `ops`）、`PO`、`PM`、`QD`、`RD`、`teamMembers`（账号字符串数组）、`desc`、`acl`（`private` | `open`）、`whitelist`。
+
+```bash
+node dist/execution/createExecution.mjs 12 '{"name":"测试执行1","code":"test1","begin":"2021-12-01","end":"2021-12-11","days":10}'
+```
+
+## 修改执行 JSON
+
+必填：`project`、`name`、`code`、`begin`、`end`。
+
+可选：`days`、`lifetime`（`short` | `long` | `ops`）、`PO`、`PM`、`QD`、`RD`、`teamMembers`（账号字符串数组）、`desc`、`acl`（`private` | `open`）、`whitelist`。
+
+```bash
+node dist/execution/updateExecution.mjs 40 '{"project":12,"name":"测试执行1","code":"test1","begin":"2021-12-01","end":"2021-12-11","days":10}'
+```
+
+## 创建需求 JSON
+
+必填：`title`、`product`、`pri`、`category`。
+
+可选：`spec`（需求描述）、`verify`（验收标准）、`source`、`sourceNote`、`estimate`、`keywords`。
+
+`category` 取值：`feature` | `interface` | `performance` | `safe` | `experience` | `improve` | `other`。
+
+`source` 取值：`customer` | `user` | `po` | `market`。
+
+```bash
+node dist/story/createStory.mjs '{"title":"测试需求","spec":"测试","product":1,"pri":1,"category":"feature"}'
+```
+
+## 变更需求 JSON
+
+字段均为可选，传需要变更的子集即可。
+
+可选：`title`、`spec`（需求描述）、`verify`（验收标准）。
+
+```bash
+node dist/story/changeStory.mjs 1 '{"spec":"变更描述"}'
+```
+
+## 修改需求 JSON
+
+字段均为可选，传需要更新的子集即可。与「变更需求」不同，本接口修改模块、来源、优先级等其他字段。
+
+可选：`module`、`source`、`sourceNote`、`pri`、`category`、`estimate`、`keywords`。
+
+`category` 取值：`feature` | `interface` | `performance` | `safe` | `experience` | `improve` | `other`。
+
+`source` 取值：`customer` | `user` | `po` | `market`。
+
+```bash
+node dist/story/updateStory.mjs 14 '{"category":"other"}'
+```
 
 ## 创建 / 修改任务 JSON
 
@@ -69,17 +200,54 @@ node dist/task/createTask.mjs 55 '{"name":"实现登录","assignedTo":["admin"],
 
 修改任务字段均为可选，传需要更新的子集即可。
 
+## 创建 / 修改用例 JSON
+
+必填（创建）：`title`、`type`、`steps`（步骤数组，每项含 `desc`、`expect`）。
+
+可选：`branch`、`module`、`story`、`stage`、`precondition`、`pri`、`keywords`。
+
+`type` 取值：`feature` | `performance` | `config` | `install` | `security` | `interface` | `unit` | `other`。
+
+`stage` 取值：`unittest` | `feature` | `intergrate` | `system` | `smoke` | `bvt`。
+
+```bash
+node dist/testcase/createTestcase.mjs 1 '{"title":"case1","pri":1,"type":"feature","steps":[{"desc":"步骤1","expect":"结果1"}]}'
+```
+
+修改用例字段均为可选，传需要更新的子集即可。
+
+```bash
+node dist/testcase/updateTestcase.mjs 9 '{"title":"case1","pri":1,"type":"feature","steps":[{"desc":"步骤1","expect":"结果1"}]}'
+```
+
+## 创建 / 修改 Bug JSON
+
+必填：`title`、`severity`、`pri`、`type`。
+
+可选：`branch`、`module`、`execution`、`keywords`、`os`、`browser`、`steps`、`task`、`story`、`deadline`、`openedBuild`（影响版本字符串数组）。
+
+`type` 取值：`codeerror` | `config` | `install` | `security` | `performance` | `standard` | `automation` | `designdefect` | `others`。
+
+```bash
+node dist/bug/createBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"codeerror","steps":"","openedBuild":["trunk"]}'
+node dist/bug/updateBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"codeerror","openedBuild":["trunk"]}'
+```
+
 ## ID 与概念
 
 | 概念 | 说明 |
 |------|------|
 | program | 项目集 |
-| product | 产品；Bug 列表挂在产品下 |
-| execution | 执行（迭代/sprint）；任务列表挂在执行下 |
+| project | 项目；创建时需关联至少一个 product |
+| product | 产品；Bug / 用例 / 需求列表与创建挂在产品下 |
+| story | 需求；创建时 body 需含 product；列表可挂在产品、项目或执行下，详情/变更/删除用需求 ID |
+| execution | 执行（迭代/sprint）；创建挂在项目下，任务/需求列表挂在执行下 |
 | task | 任务；详情/改删用任务 ID |
+| bug | Bug；创建挂在产品下，详情/改删用 Bug ID |
+| testcase | 用例；创建挂在产品下，详情/修改/删除用用例 ID |
 | user | 用户；指派用 **account**，不是 realname |
 
-不知道 ID 时：先查列表（products / programs / tasks / users），再对具体 ID 操作。
+不知道 ID 时：先查列表（products / programs / projects / stories / tasks / users），再对具体 ID 操作。
 
 ## 输出约定
 
