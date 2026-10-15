@@ -90,6 +90,9 @@ ZENDAO_TOKEN=
 | 创建 Bug | `node dist/bug/createBug.mjs <productId> '<jsonBody>'` |
 | 修改 Bug | `node dist/bug/updateBug.mjs <bugId> '<jsonBody>'` |
 | 删除 Bug | `node dist/bug/deleteBug.mjs <bugId>` |
+| 解决 Bug | `node dist/bug/resolveBug.mjs <bugId> '<jsonBody>'` |
+| 激活 Bug | `node dist/bug/activateBug.mjs <bugId> ['<jsonBody>']` |
+| 关闭 Bug | `node dist/bug/closeBug.mjs <bugId> ['<jsonBody>']` |
 | 执行下任务列表 | `node dist/task/getTasks.mjs <executionId>` |
 | 任务详情 | `node dist/task/getTask.mjs <taskId>` |
 | 创建任务 | `node dist/task/createTask.mjs <executionId> '<jsonBody>'` |
@@ -245,6 +248,30 @@ node dist/bug/createBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"code
 node dist/bug/updateBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"codeerror","openedBuild":["trunk"]}'
 ```
 
+## 解决 / 激活 / 关闭 Bug JSON
+
+**解决 Bug**：必填 `resolution`；可选 `resolvedBuild`（解决版本，如 `"trunk"`）、`comment`（备注，会挂在 resolved 历史记录下，常用于填写问题原因）、`assignedTo`（指派账号）、`duplicateBug`（重复 Bug ID，仅 `resolution = duplicate` 时）。
+
+`resolution` 取值：`fixed`（已解决） | `notrepro`（无法重现） | `duplicate`（重复 Bug） | `bydesign`（设计如此） | `willnotfix`（不予解决） | `tostory`（转为需求） | `postponed`（延期处理） | `external`（外部原因）。
+
+```bash
+node dist/bug/resolveBug.mjs 1 '{"resolution":"fixed","resolvedBuild":"trunk","comment":"问题原因与修复说明"}'
+```
+
+**激活 Bug**：字段均可选，不传 body 也可。可选 `assignedTo`（指派账号）、`openedBuild`（影响版本字符串数组）、`comment`（激活备注）。
+
+```bash
+node dist/bug/activateBug.mjs 1 '{"assignedTo":"admin","openedBuild":["trunk"],"comment":"激活原因"}'
+```
+
+**关闭 Bug**：字段均可选，不传 body 也可。可选 `comment`（关闭备注）。
+
+```bash
+node dist/bug/closeBug.mjs 1 '{"comment":"验证通过，关闭"}'
+```
+
+> 注意：解决 / 激活 / 关闭均为即时生效的写操作，执行前确认 Bug ID 与备注内容无误；每次调用都会新增一条对应的历史记录。
+
 ## ID 与概念
 
 | 概念 | 说明 |
@@ -255,7 +282,7 @@ node dist/bug/updateBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"code
 | story | 需求；创建时 body 需含 product；列表可挂在产品、项目或执行下，详情/变更/删除用需求 ID |
 | execution | 执行（迭代/sprint）；创建挂在项目下，任务/需求列表挂在执行下 |
 | task | 任务；详情/改删用任务 ID |
-| bug | Bug；创建挂在产品下，详情/改删用 Bug ID |
+| bug | Bug；创建挂在产品下，详情/改删/解决/激活/关闭用 Bug ID |
 | testcase | 用例；创建挂在产品下，详情/修改/删除用用例 ID |
 | user | 用户；指派用 **account**，不是 realname |
 

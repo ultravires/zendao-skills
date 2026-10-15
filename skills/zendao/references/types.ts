@@ -983,6 +983,57 @@ export interface DeleteBugResponse {
   message: string;
 }
 
+/** Bug 解决方案 */
+export type BugResolution =
+  | 'fixed' // 已解决
+  | 'notrepro' // 无法重现
+  | 'duplicate' // 重复 Bug
+  | 'bydesign' // 设计如此
+  | 'willnotfix' // 不予解决
+  | 'tostory' // 转为需求
+  | 'postponed' // 延期处理
+  | 'external' // 外部原因
+  | string;
+
+/** 解决 Bug 请求体 */
+export interface ResolveBugBody {
+  /** 解决方案（必填） */
+  resolution: Exclude<BugResolution, ''>;
+  /** 解决版本，如 "trunk"（主干） */
+  resolvedBuild?: string;
+  /** 备注（问题原因等），会挂在 resolved 历史记录下 */
+  comment?: string;
+  /** 指派给（账号） */
+  assignedTo?: string;
+  /** 重复 Bug ID（resolution 为 duplicate 时使用） */
+  duplicateBug?: number;
+}
+
+/** 解决 Bug 响应 */
+export type ResolveBugResponse = Bug;
+
+/** 激活 Bug 请求体（字段均为可选） */
+export interface ActivateBugBody {
+  /** 指派给（账号） */
+  assignedTo?: string;
+  /** 影响版本 */
+  openedBuild?: string[];
+  /** 备注，会挂在 activated 历史记录下 */
+  comment?: string;
+}
+
+/** 激活 Bug 响应 */
+export type ActivateBugResponse = Bug;
+
+/** 关闭 Bug 请求体（字段均为可选） */
+export interface CloseBugBody {
+  /** 备注，会挂在 closed 历史记录下 */
+  comment?: string;
+}
+
+/** 关闭 Bug 响应 */
+export type CloseBugResponse = Bug;
+
 /** 用例类型 */
 export type TestCaseType =
   | 'feature'
