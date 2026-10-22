@@ -1,7 +1,7 @@
 {
   "kind": "trigger-accuracy",
   "skill_name": "zendao",
-  "note": "触发准确性 eval 集：should_trigger=true 表示该意图应触发本 skill（含禅道域内但能力受限的请求，触发后应如实告知只读/不支持），false 表示不应触发（网页 UI 操作、非禅道工具、报表统计或完全无关）。用于人工复核 description 的触发质量，也可作为 description 优化的验证集。",
+  "note": "触发准确性 eval 集：should_trigger=true 表示该意图应触发本 skill（含禅道域内但能力受限的请求，触发后应如实告知只读/不支持），false 表示不应触发（网页 UI 操作、非禅道工具、报表统计或完全无关）。回归兜底：node evals/run-evals.mjs（启发式判定，退出码 0 表示全部通过；它是下界，最终触发质量以人工/LLM 逐条复核为准）。改 description 前后各跑一遍，防止误删触发词。",
   "queries": [
     {"id": 1, "query": "帮我查一下禅道上我名下有哪些未解决的 Bug", "should_trigger": true},
     {"id": 2, "query": "在 ZenTao 里给产品 135 提个 Bug：登录页验证码不刷新", "should_trigger": true},

@@ -16807,6 +16807,22 @@ client.interceptors.request.use((config2) => {
   }
   return config2;
 });
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const data = error.response?.data;
+    const detail = data == null ? "" : typeof data === "string" ? data : JSON.stringify(data);
+    if (status) {
+      console.error(`\u26A0 \u7985\u9053 API \u8BF7\u6C42\u5931\u8D25\uFF1AHTTP ${status}${detail ? `\uFF0C\u54CD\u5E94\uFF1A${detail}` : ""}`);
+    } else {
+      console.error(
+        `\u26A0 \u7F51\u7EDC\u5C42\u9519\u8BEF\uFF1A${error.message}\uFF08\u8BF7\u68C0\u67E5 ZENDAO_API_BASE_URL \u662F\u5426\u53EF\u8FBE\u3001\u662F\u5426\u9700\u8981\u5185\u7F51 / VPN\uFF09`
+      );
+    }
+    process.exit(1);
+  }
+);
 var client_default = client;
 
 // src/api/token/index.ts

@@ -38,4 +38,22 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status: number | undefined = error.response?.status;
+    const data = error.response?.data;
+    const detail =
+      data == null ? '' : typeof data === 'string' ? data : JSON.stringify(data);
+    if (status) {
+      console.error(`⚠ 禅道 API 请求失败：HTTP ${status}${detail ? `，响应：${detail}` : ''}`);
+    } else {
+      console.error(
+        `⚠ 网络层错误：${error.message}（请检查 ZENDAO_API_BASE_URL 是否可达、是否需要内网 / VPN）`,
+      );
+    }
+    process.exit(1);
+  },
+);
+
 export default client;

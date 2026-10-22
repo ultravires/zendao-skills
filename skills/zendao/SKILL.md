@@ -1,9 +1,9 @@
 ---
 name: zendao
-version: 1.1.0
+version: 1.1.1
 description: >-
   Query and manage ZenTao (禅道) programs, projects, products, stories,
-  tasks, bugs, testcases and users, plus read-only testtask queries, via
+  tasks, bugs and testcases, plus read-only testtask and user queries, via
   bundled CLI scripts. Use when the user mentions 禅道, ZenTao, Zendao,
   项目集, 项目, 执行/execution, 迭代/sprint, 需求/story, 任务, Bug, 用例,
   测试用例, 测试单/testtask, 产品, or needs to list/create/update/delete
@@ -73,6 +73,19 @@ ZENDAO_TOKEN=
 **写操作（创建 / 修改 / 删除）前**：确认目标 ID、指派人账号、日期等关键参数；删除任务 / 需求 / 项目 / 项目集需先向用户确认。
 
 **组 JSON body 时**：必读 [`references/json-templates.md`](references/json-templates.md)，其中有每个写接口的必填 / 可选字段、枚举取值与可运行示例。
+
+## 常见错误排查
+
+脚本遇到 API 或网络错误时会打印 `⚠ …` 单行诊断并以退出码 1 结束，按下表处置：
+
+| 现象 | 含义与处置 |
+|------|-----------|
+| `HTTP 400` | 参数或 ID 问题。先用列表接口确认 ID 存在、挂接关系正确（如执行属于该项目、Bug 属于该产品），再核对 jsonBody 必填字段与枚举取值（见 `references/json-templates.md`） |
+| `HTTP 401` | Token 失效或账号密码错误。重跑 `node dist/token/getToken.mjs` 验证；若配置了 `ZENDAO_TOKEN`，检查是否过期，可清空后让脚本重新登录 |
+| `HTTP 403` | 权限不足。当前账号无权操作该实体，换有权限的账号或联系禅道管理员 |
+| `HTTP 404` | 资源不存在或路径错误。确认 ID、确认 `ZENDAO_API_BASE_URL` 形如 `https://host/api.php/v1` |
+| `网络层错误`（无 HTTP 状态码） | 地址不可达。检查 `ZENDAO_API_BASE_URL` 拼写、是否需要内网 / VPN |
+| 输出 `缺少 ZENDAO_API_BASE_URL 配置` | 配置缺失，按「首次配置」完成后再试 |
 
 ## 脚本速查
 
