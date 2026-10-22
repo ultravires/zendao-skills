@@ -1,0 +1,27 @@
+{
+  "kind": "trigger-accuracy",
+  "skill_name": "zendao",
+  "note": "触发准确性 eval 集：should_trigger=true 表示该意图应触发本 skill（含禅道域内但能力受限的请求，触发后应如实告知只读/不支持），false 表示不应触发（网页 UI 操作、非禅道工具、报表统计或完全无关）。用于人工复核 description 的触发质量，也可作为 description 优化的验证集。",
+  "queries": [
+    {"id": 1, "query": "帮我查一下禅道上我名下有哪些未解决的 Bug", "should_trigger": true},
+    {"id": 2, "query": "在 ZenTao 里给产品 135 提个 Bug：登录页验证码不刷新", "should_trigger": true},
+    {"id": 3, "query": "看看项目集下面都有哪些项目，把进行中的列出来", "should_trigger": true},
+    {"id": 4, "query": "这个迭代的任务进度怎么样了？还有哪些没完成", "should_trigger": true},
+    {"id": 5, "query": "帮我在执行 55 下建个任务：实现登录接口，指派给 admin，这周五前完成", "should_trigger": true},
+    {"id": 6, "query": "把需求 14 的优先级改成 1，顺便看下它现在的状态", "should_trigger": true},
+    {"id": 7, "query": "Bug 1024 已经修好了，帮我解决掉，版本 trunk，备注写「缓存未刷新导致」", "should_trigger": true},
+    {"id": 8, "query": "项目 142 的测试单执行情况如何？有多少用例没过", "should_trigger": true},
+    {"id": 9, "query": "给产品 1 建一条测试用例，标题是「登录-错误密码锁定」", "should_trigger": true},
+    {"id": 10, "query": "zendao 上账号 zhangsan 的真实姓名和部门是什么", "should_trigger": true},
+    {"id": 11, "query": "帮我在禅道里创建一个 sprint，名字叫「10月迭代」，挂在项目 12 下", "should_trigger": true},
+    {"id": 12, "query": "删除项目 12（我先确认一下再删）", "should_trigger": true},
+    {"id": 13, "query": "帮我在禅道网页上点一下「关闭」按钮，把这个 Bug 关掉", "should_trigger": false},
+    {"id": 14, "query": "截个禅道看板页面的图给我看看", "should_trigger": false},
+    {"id": 15, "query": "我们 Jira 上有个任务要改一下状态", "should_trigger": false},
+    {"id": 16, "query": "帮我在 TAPD 里建个需求", "should_trigger": false},
+    {"id": 17, "query": "给我出一份本月的燃尽图和工时汇总报表", "should_trigger": false},
+    {"id": 18, "query": "统计一下这个季度每个测试的 Bug 分布，画个看板", "should_trigger": false},
+    {"id": 19, "query": "帮我订明天下午的会议室", "should_trigger": false},
+    {"id": 20, "query": "这个项目的代码帮我 review 一下", "should_trigger": false}
+  ]
+}

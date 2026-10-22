@@ -1,7 +1,17 @@
 import axios from 'axios';
 
-const API_BASE_URL =
-  process.env.ZENDAO_API_BASE_URL || 'https://zendao.datagrand.com/api.php/v1';
+const API_BASE_URL = process.env.ZENDAO_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  console.error(
+    '缺少 ZENDAO_API_BASE_URL 配置，脚本已退出（不猜测默认地址）。\n' +
+      '请配置禅道 REST API 根地址（形如 https://host/api.php/v1），优先级：\n' +
+      '  1. 用户 Shell 环境变量（如 ~/.zshrc 中 export ZENDAO_API_BASE_URL=...）\n' +
+      '  2. 当前工作目录的 .env.local\n' +
+      '  3. 当前工作目录的 .env',
+  );
+  process.exit(1);
+}
 
 let authToken: string | undefined = process.env.ZENDAO_TOKEN;
 

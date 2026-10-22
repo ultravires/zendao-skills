@@ -1,3 +1,22 @@
+/**
+ * 禅道（ZenTao）REST API 请求 / 响应类型定义。
+ *
+ * 目录（按实体分组，可按行号或「export interface <名>」检索）：
+ * - 用户 User（~L1）：ZenTaoUser、User、UserProfile、UserListItem、GetUsersParams/Response
+ * - 任务 Task（~L135）：Task、TaskDetail、TaskTeamMember、Create/UpdateTaskBody
+ * - 项目集 Program（~L353）：Program、Create/UpdateProgramBody
+ * - 项目 Project（~L488）：Project、Create/UpdateProjectBody
+ * - 执行 Execution（~L626）：Execution、Create/UpdateExecutionBody
+ * - Bug（~L791）：Bug、BugDetail、Create/UpdateBugBody、Resolve/Activate/CloseBugBody、BugResolution
+ * - 用例 TestCase（~L1038）：TestCase、TestCaseDetail、TestCaseStep(Input)、Create/UpdateTestcaseBody
+ * - 测试单 TestTask（~L1219，只读）：TestTask、TestTaskDetail、TestTaskCase、GetTesttasksParams/Response
+ * - 需求 Story（~L1333）：Story、StoryDetail、Create/Update/ChangeStoryBody
+ * - 产品 Product（~L1533）：Product、GetProductsResponse
+ *
+ * 命名约定：Get<X>Response 为响应包装；Create/Update<X>Body 为请求体；
+ * 列表参数为 Get<X>sParams。行号为构建时近似值，可能随维护小幅漂移。
+ */
+
 /** 禅道用户对象（任务等接口中嵌套的精简用户信息） */
 export interface ZenTaoUser {
   id: number;

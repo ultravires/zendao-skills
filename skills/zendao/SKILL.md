@@ -1,12 +1,15 @@
 ---
 name: zendao
+version: 1.1.0
 description: >-
   Query and manage ZenTao (禅道) programs, projects, products, stories,
-  tasks, bugs, testcases, testtasks, and users via bundled CLI scripts. Use
-  when the user mentions 禅道, ZenTao, Zendao, 项目集, 项目, 执行/execution,
-  需求/story, 任务, Bug, 用例, 测试用例, 测试单/testtask, 产品, or needs to
-  list/create/update/delete ZenTao entities through this project's API
-  scripts.
+  tasks, bugs, testcases and users, plus read-only testtask queries, via
+  bundled CLI scripts. Use when the user mentions 禅道, ZenTao, Zendao,
+  项目集, 项目, 执行/execution, 迭代/sprint, 需求/story, 任务, Bug, 用例,
+  测试用例, 测试单/testtask, 产品, or needs to list/create/update/delete
+  ZenTao entities through this project's API scripts. Not for ZenTao web
+  UI automation (页面点击/截图), report or metrics dashboards (报表/度量统计),
+  or non-ZenTao project tools such as Jira, TAPD or 飞书项目.
 ---
 
 # 禅道 (ZenTao)
@@ -15,9 +18,18 @@ description: >-
 
 脚本相对于本技能根目录（含 `SKILL.md` 的目录）执行。
 
+## 何时不要用
+
+- **禅道网页 UI 操作**（在禅道页面里点击、填表、截图）→ 本技能只走 REST API，请改用浏览器自动化类技能。
+- **非禅道的项目管理工具**（Jira、TAPD、飞书项目等）→ 不触发。
+- **报表 / 度量统计**（燃尽图、工时汇总、质量看板）→ 本技能只覆盖实体查询与 CRUD，无统计接口。
+- **创建 / 修改测试单（testtask）与用户（user）** → 测试单为只读接口，用户仅支持查询；请引导用户在禅道页面操作。
+
 ## 前置条件
 
 已安装 Node.js（建议 18+）。配置按以下优先级读取：**用户 Shell 环境变量（如 `~/.zshrc` 中 export 的 `ZENDAO_*`）> 当前工作目录的 `.env.local` > 当前工作目录的 `.env`**（注意：`.env` 文件从 cwd 读取，不是技能目录）。
+
+未配置 `ZENDAO_API_BASE_URL` 时脚本会直接报错退出，不会访问任何默认地址。
 
 ## 首次配置（缺失时必做）
 
@@ -59,6 +71,8 @@ ZENDAO_TOKEN=
 4. 结果为 stdout 上的 JSON；向用户总结关键字段，必要时再跟进查询
 
 **写操作（创建 / 修改 / 删除）前**：确认目标 ID、指派人账号、日期等关键参数；删除任务 / 需求 / 项目 / 项目集需先向用户确认。
+
+**组 JSON body 时**：必读 [`references/json-templates.md`](references/json-templates.md)，其中有每个写接口的必填 / 可选字段、枚举取值与可运行示例。
 
 ## 脚本速查
 
@@ -116,180 +130,9 @@ ZENDAO_TOKEN=
 
 `order` 格式：`字段_asc` / `字段_desc`（默认 `order_asc`）。
 
-## 创建项目集 JSON
+## 测试单（只读）
 
-字段均为可选。
-
-可选：`name`、`parent`（父项目集，`0` 表示无）、`PM`、`budget`、`budgetUnit`（`CNY` | `USD`）、`desc`、`begin`、`end`、`acl`（`open` | `private`）、`whitelist`（仅 `acl = private` 时生效）。
-
-```bash
-node dist/program/createProgram.mjs '{"name":"项目集21","begin":"2021-09-11","end":"2021-12-31"}'
-```
-
-## 修改项目集 JSON
-
-字段均为可选，传需要更新的子集即可。
-
-可选：`name`、`parent`（父项目集，`0` 表示无）、`PM`、`budget`、`budgetUnit`（`CNY` | `USD`）、`desc`、`begin`、`end`、`acl`（`open` | `private`）、`whitelist`。
-
-```bash
-node dist/program/updateProgram.mjs 12 '{"name":"项目集","PM":"admin"}'
-```
-
-## 创建项目 JSON
-
-必填：`name`、`code`、`begin`、`end`、`products`（产品 ID 数组，不能为空）。
-
-可选：`model`（默认 `scrum`）、`parent`（所属项目集，默认 `0`）。
-
-`model` 取值：`scrum` | `waterfall`。
-
-```bash
-node dist/project/createProject.mjs '{"name":"test","code":"test","begin":"2021-01-01","end":"2022-01-01","products":[1]}'
-```
-
-## 修改项目 JSON
-
-字段均为可选，传需要更新的子集即可。
-
-可选：`name`、`code`、`parent`、`PM`、`budget`、`budgetUnit`（`CNY` | `USD`）、`days`、`desc`、`acl`（`open` | `private`）、`whitelist`、`auth`（`extend` | `reset`）。
-
-```bash
-node dist/project/updateProject.mjs 12 '{"name":"修改项目","PM":"admin"}'
-```
-
-## 创建执行 JSON
-
-必填：`name`、`code`、`begin`、`end`。
-
-可选：`days`、`lifetime`（`short` | `long` | `ops`）、`PO`、`PM`、`QD`、`RD`、`teamMembers`（账号字符串数组）、`desc`、`acl`（`private` | `open`）、`whitelist`。
-
-```bash
-node dist/execution/createExecution.mjs 12 '{"name":"测试执行1","code":"test1","begin":"2021-12-01","end":"2021-12-11","days":10}'
-```
-
-## 修改执行 JSON
-
-必填：`project`、`name`、`code`、`begin`、`end`。
-
-可选：`days`、`lifetime`（`short` | `long` | `ops`）、`PO`、`PM`、`QD`、`RD`、`teamMembers`（账号字符串数组）、`desc`、`acl`（`private` | `open`）、`whitelist`。
-
-```bash
-node dist/execution/updateExecution.mjs 40 '{"project":12,"name":"测试执行1","code":"test1","begin":"2021-12-01","end":"2021-12-11","days":10}'
-```
-
-## 创建需求 JSON
-
-必填：`title`、`product`、`pri`、`category`。
-
-可选：`spec`（需求描述）、`verify`（验收标准）、`source`、`sourceNote`、`estimate`、`keywords`。
-
-`category` 取值：`feature` | `interface` | `performance` | `safe` | `experience` | `improve` | `other`。
-
-`source` 取值：`customer` | `user` | `po` | `market`。
-
-```bash
-node dist/story/createStory.mjs '{"title":"测试需求","spec":"测试","product":1,"pri":1,"category":"feature"}'
-```
-
-## 变更需求 JSON
-
-字段均为可选，传需要变更的子集即可。
-
-可选：`title`、`spec`（需求描述）、`verify`（验收标准）。
-
-```bash
-node dist/story/changeStory.mjs 1 '{"spec":"变更描述"}'
-```
-
-## 修改需求 JSON
-
-字段均为可选，传需要更新的子集即可。与「变更需求」不同，本接口修改模块、来源、优先级等其他字段。
-
-可选：`module`、`source`、`sourceNote`、`pri`、`category`、`estimate`、`keywords`。
-
-`category` 取值：`feature` | `interface` | `performance` | `safe` | `experience` | `improve` | `other`。
-
-`source` 取值：`customer` | `user` | `po` | `market`。
-
-```bash
-node dist/story/updateStory.mjs 14 '{"category":"other"}'
-```
-
-## 创建 / 修改任务 JSON
-
-必填（创建）：`name`、`type`、`assignedTo`（账号字符串数组）、`estStarted`、`deadline`。
-
-可选：`module`、`story`、`fromBug`、`pri`、`estimate`。
-
-`type` 取值：`design` | `devel` | `request` | `test` | `study` | `discuss` | `ui` | `affair` | `misc`。
-
-```bash
-node dist/task/createTask.mjs 55 '{"name":"实现登录","assignedTo":["admin"],"type":"devel","estStarted":"2026-07-21","deadline":"2026-07-28","pri":2,"estimate":8}'
-```
-
-修改任务字段均为可选，传需要更新的子集即可。
-
-## 创建 / 修改用例 JSON
-
-必填（创建）：`title`、`type`、`steps`（步骤数组，每项含 `desc`、`expect`）。
-
-可选：`branch`、`module`、`story`、`stage`、`precondition`、`pri`、`keywords`。
-
-`type` 取值：`feature` | `performance` | `config` | `install` | `security` | `interface` | `unit` | `other`。
-
-`stage` 取值：`unittest` | `feature` | `intergrate` | `system` | `smoke` | `bvt`。
-
-```bash
-node dist/testcase/createTestcase.mjs 1 '{"title":"case1","pri":1,"type":"feature","steps":[{"desc":"步骤1","expect":"结果1"}]}'
-```
-
-修改用例字段均为可选，传需要更新的子集即可。
-
-```bash
-node dist/testcase/updateTestcase.mjs 9 '{"title":"case1","pri":1,"type":"feature","steps":[{"desc":"步骤1","expect":"结果1"}]}'
-```
-
-## 创建 / 修改 Bug JSON
-
-必填：`title`、`severity`、`pri`、`type`。
-
-可选：`branch`、`module`、`execution`、`keywords`、`os`、`browser`、`steps`、`task`、`story`、`deadline`、`openedBuild`（影响版本字符串数组）。
-
-`type` 取值：`codeerror` | `config` | `install` | `security` | `performance` | `standard` | `automation` | `designdefect` | `others`。
-
-```bash
-node dist/bug/createBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"codeerror","steps":"","openedBuild":["trunk"]}'
-node dist/bug/updateBug.mjs 1 '{"title":"Bug2","severity":1,"pri":1,"type":"codeerror","openedBuild":["trunk"]}'
-```
-
-## 解决 / 激活 / 关闭 Bug JSON
-
-**解决 Bug**：必填 `resolution`；可选 `resolvedBuild`（解决版本，如 `"trunk"`）、`comment`（备注，会挂在 resolved 历史记录下，常用于填写问题原因）、`assignedTo`（指派账号）、`duplicateBug`（重复 Bug ID，仅 `resolution = duplicate` 时）。
-
-`resolution` 取值：`fixed`（已解决） | `notrepro`（无法重现） | `duplicate`（重复 Bug） | `bydesign`（设计如此） | `willnotfix`（不予解决） | `tostory`（转为需求） | `postponed`（延期处理） | `external`（外部原因）。
-
-```bash
-node dist/bug/resolveBug.mjs 1 '{"resolution":"fixed","resolvedBuild":"trunk","comment":"问题原因与修复说明"}'
-```
-
-**激活 Bug**：字段均可选，不传 body 也可。可选 `assignedTo`（指派账号）、`openedBuild`（影响版本字符串数组）、`comment`（激活备注）。
-
-```bash
-node dist/bug/activateBug.mjs 1 '{"assignedTo":"admin","openedBuild":["trunk"],"comment":"激活原因"}'
-```
-
-**关闭 Bug**：字段均可选，不传 body 也可。可选 `comment`（关闭备注）。
-
-```bash
-node dist/bug/closeBug.mjs 1 '{"comment":"验证通过，关闭"}'
-```
-
-> 注意：解决 / 激活 / 关闭均为即时生效的写操作，执行前确认 Bug ID 与备注内容无误；每次调用都会新增一条对应的历史记录。
-
-## 测试单
-
-测试单为只读接口（列表 / 项目下列表 / 详情）。
+测试单仅有列表 / 项目下列表 / 详情三个只读接口，无创建、修改、删除能力，不要尝试。
 
 `status` 取值：`wait`（未开始） | `doing`（进行中） | `done`（已关闭） | `blocked`（被阻塞）。
 
@@ -315,8 +158,8 @@ node dist/testtask/getTesttask.mjs 615
 | task | 任务；详情/改删用任务 ID |
 | bug | Bug；创建挂在产品下，详情/改删/解决/激活/关闭用 Bug ID |
 | testcase | 用例；创建挂在产品下，详情/修改/删除用用例 ID |
-| testtask | 测试单；列表可按产品/分支筛选或挂在项目下，详情（含关联用例执行情况）用测试单 ID |
-| user | 用户；指派用 **account**，不是 realname |
+| testtask | 测试单（只读）；列表可按产品/分支筛选或挂在项目下，详情（含关联用例执行情况）用测试单 ID |
+| user | 用户（只读）；指派用 **account**，不是 realname |
 
 不知道 ID 时：先查列表（products / programs / projects / stories / tasks / users），再对具体 ID 操作。
 
@@ -326,6 +169,7 @@ node dist/testtask/getTesttask.mjs 615
 - 列表默认突出：`id`、名称/标题、状态、指派人、关键日期
 - 完整 JSON 仅在用户需要时再贴出
 
-## 类型参考
+## 参考资料
 
-请求/响应字段详见 [`references/types.ts`](references/types.ts)。
+- **组写接口 JSON body 时** → [`references/json-templates.md`](references/json-templates.md)：每个创建 / 修改 / 状态流转接口的必填字段、枚举取值与可运行示例。
+- **查请求 / 响应字段结构时** → [`references/types.ts`](references/types.ts)：完整类型定义，文件顶部有按实体分组的目录索引。

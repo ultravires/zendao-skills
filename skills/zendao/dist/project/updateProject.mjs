@@ -16783,7 +16783,13 @@ var import_dotenv = __toESM(require_main(), 1);
 
 // src/api/client.ts
 var import_axios = __toESM(require_axios(), 1);
-var API_BASE_URL = process.env.ZENDAO_API_BASE_URL || "https://zendao.datagrand.com/api.php/v1";
+var API_BASE_URL = process.env.ZENDAO_API_BASE_URL;
+if (!API_BASE_URL) {
+  console.error(
+    "\u7F3A\u5C11 ZENDAO_API_BASE_URL \u914D\u7F6E\uFF0C\u811A\u672C\u5DF2\u9000\u51FA\uFF08\u4E0D\u731C\u6D4B\u9ED8\u8BA4\u5730\u5740\uFF09\u3002\n\u8BF7\u914D\u7F6E\u7985\u9053 REST API \u6839\u5730\u5740\uFF08\u5F62\u5982 https://host/api.php/v1\uFF09\uFF0C\u4F18\u5148\u7EA7\uFF1A\n  1. \u7528\u6237 Shell \u73AF\u5883\u53D8\u91CF\uFF08\u5982 ~/.zshrc \u4E2D export ZENDAO_API_BASE_URL=...\uFF09\n  2. \u5F53\u524D\u5DE5\u4F5C\u76EE\u5F55\u7684 .env.local\n  3. \u5F53\u524D\u5DE5\u4F5C\u76EE\u5F55\u7684 .env"
+  );
+  process.exit(1);
+}
 var authToken = process.env.ZENDAO_TOKEN;
 var setToken = (token) => {
   authToken = token;
