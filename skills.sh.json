@@ -4,7 +4,7 @@
   "groupings": [
     {
       "title": "禅道",
-      "description": "通过自包含 CLI 脚本查询与管理禅道（ZenTao）项目集、项目、产品、需求、任务、Bug、用例与用户。",
+      "description": "通过自包含 CLI 脚本查询与管理禅道（Zendao）项目集、项目、产品、需求、任务、Bug、用例与用户。",
       "skills": ["zendao"]
     }
   ]

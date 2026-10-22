@@ -26,7 +26,7 @@ const NEGATIVE = [
   '报表', '看板', '会议室', 'review', '代码',
 ];
 const STRONG = [
-  '禅道', 'zentao', 'zendao', '项目集', '迭代', 'sprint', '测试单',
+  '禅道', 'zendao', '项目集', '迭代', 'sprint', '测试单',
   'testtask', '用例', 'bug', 'story', '需求',
 ];
 const CONTEXT = ['项目', '任务', '产品', '执行'];

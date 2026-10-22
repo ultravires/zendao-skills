@@ -1,8 +1,8 @@
 /**
- * 禅道（ZenTao）REST API 请求 / 响应类型定义。
+ * 禅道（Zendao）REST API 请求 / 响应类型定义。
  *
  * 目录（按实体分组，可按行号或「export interface <名>」检索）：
- * - 用户 User（~L1）：ZenTaoUser、User、UserProfile、UserListItem、GetUsersParams/Response
+ * - 用户 User（~L1）：ZendaoUser、User、UserProfile、UserListItem、GetUsersParams/Response
  * - 任务 Task（~L135）：Task、TaskDetail、TaskTeamMember、Create/UpdateTaskBody
  * - 项目集 Program（~L353）：Program、Create/UpdateProgramBody
  * - 项目 Project（~L488）：Project、Create/UpdateProjectBody
@@ -18,7 +18,7 @@
  */
 
 /** 禅道用户对象（任务等接口中嵌套的精简用户信息） */
-export interface ZenTaoUser {
+export interface ZendaoUser {
   id: number;
   account: string;
   avatar: string;
@@ -190,23 +190,23 @@ export interface Task {
   mailto: number[];
   desc: string;
   version: number;
-  openedBy: ZenTaoUser;
+  openedBy: ZendaoUser;
   openedDate: string;
-  assignedTo: ZenTaoUser;
+  assignedTo: ZendaoUser;
   assignedDate: string;
   estStarted: string;
   realStarted: string | null;
-  finishedBy: ZenTaoUser | null;
+  finishedBy: ZendaoUser | null;
   finishedDate: string | null;
   finishedList: string;
-  canceledBy: ZenTaoUser | null;
+  canceledBy: ZendaoUser | null;
   canceledDate: string | null;
-  closedBy: ZenTaoUser | null;
+  closedBy: ZendaoUser | null;
   closedDate: string | null;
   planDuration: number;
   realDuration: number;
   closedReason: string;
-  lastEditedBy: ZenTaoUser | null;
+  lastEditedBy: ZendaoUser | null;
   lastEditedDate: string | null;
   activatedDate: string;
   deleted: boolean;
@@ -319,7 +319,7 @@ export interface CreateTaskBody {
   /** 预计工时 */
   estimate?: number;
   /** 创建人信息（通常由服务端根据 Token 填充） */
-  openedBy?: ZenTaoUser;
+  openedBy?: ZendaoUser;
   /** 创建时间（通常由服务端填充） */
   openedDate?: string;
 }
@@ -409,19 +409,19 @@ export interface Program {
   parentVersion: number;
   planDuration: number;
   realDuration: number;
-  openedBy: ZenTaoUser;
+  openedBy: ZendaoUser;
   openedDate: string;
   openedVersion: string;
-  lastEditedBy: ZenTaoUser | string;
+  lastEditedBy: ZendaoUser | string;
   lastEditedDate: string | null;
-  closedBy: ZenTaoUser | null;
+  closedBy: ZendaoUser | null;
   closedDate: string | null;
-  canceledBy: ZenTaoUser | null;
+  canceledBy: ZendaoUser | null;
   canceledDate: string | null;
-  PO: ZenTaoUser | null;
-  PM: ZenTaoUser | null;
-  QD: ZenTaoUser | null;
-  RD: ZenTaoUser | null;
+  PO: ZendaoUser | null;
+  PM: ZendaoUser | null;
+  QD: ZendaoUser | null;
+  RD: ZendaoUser | null;
   team: string;
   acl: ProgramAcl | string;
   whitelist: unknown[];
@@ -546,19 +546,19 @@ export interface Project {
   parentVersion: number;
   planDuration: number;
   realDuration: number;
-  openedBy: ZenTaoUser | string;
+  openedBy: ZendaoUser | string;
   openedDate: string;
   openedVersion: string;
-  lastEditedBy: ZenTaoUser | string;
+  lastEditedBy: ZendaoUser | string;
   lastEditedDate: string | null;
-  closedBy: ZenTaoUser | string | null;
+  closedBy: ZendaoUser | string | null;
   closedDate: string | null;
-  canceledBy: ZenTaoUser | string | null;
+  canceledBy: ZendaoUser | string | null;
   canceledDate: string | null;
-  PO: ZenTaoUser | string | null;
-  PM: ZenTaoUser | string | null;
-  QD: ZenTaoUser | string | null;
-  RD: ZenTaoUser | string | null;
+  PO: ZendaoUser | string | null;
+  PM: ZendaoUser | string | null;
+  QD: ZendaoUser | string | null;
+  RD: ZendaoUser | string | null;
   team: string;
   acl: ProjectAcl | string;
   whitelist: unknown;
@@ -682,19 +682,19 @@ export interface Execution {
   parentVersion?: number;
   planDuration?: number;
   realDuration?: number;
-  openedBy: ZenTaoUser | string;
+  openedBy: ZendaoUser | string;
   openedDate: string;
   openedVersion?: string;
-  lastEditedBy?: ZenTaoUser | string;
+  lastEditedBy?: ZendaoUser | string;
   lastEditedDate?: string | null;
-  closedBy?: ZenTaoUser | string | null;
+  closedBy?: ZendaoUser | string | null;
   closedDate?: string | null;
-  canceledBy?: ZenTaoUser | string | null;
+  canceledBy?: ZendaoUser | string | null;
   canceledDate?: string | null;
-  PO?: ZenTaoUser | string | null;
-  PM?: ZenTaoUser | string | null;
-  QD?: ZenTaoUser | string | null;
-  RD?: ZenTaoUser | string | null;
+  PO?: ZendaoUser | string | null;
+  PM?: ZendaoUser | string | null;
+  QD?: ZendaoUser | string | null;
+  RD?: ZendaoUser | string | null;
   team?: string;
   teamMembers?: string[];
   acl?: ExecutionAcl | string;
@@ -858,17 +858,17 @@ export interface Bug {
   feedbackBy: string;
   notifyEmail: string;
   mailto: unknown;
-  openedBy: ZenTaoUser;
+  openedBy: ZendaoUser;
   openedDate: string;
   openedBuild: string;
-  assignedTo: ZenTaoUser | null;
+  assignedTo: ZendaoUser | null;
   assignedDate: string;
   deadline: string;
-  resolvedBy: ZenTaoUser | null;
+  resolvedBy: ZendaoUser | null;
   resolution: string;
   resolvedBuild: string;
   resolvedDate: string;
-  closedBy: ZenTaoUser | null;
+  closedBy: ZendaoUser | null;
   closedDate: string;
   duplicateBug: number;
   linkBug: string;
@@ -882,7 +882,7 @@ export interface Bug {
   v2: string;
   repoType: string;
   testtask: number;
-  lastEditedBy: ZenTaoUser | null;
+  lastEditedBy: ZendaoUser | null;
   lastEditedDate: string;
   deleted: boolean;
   needconfirm: boolean;
@@ -1107,11 +1107,11 @@ export interface TestCase {
   color: string;
   frequency: string;
   order: number;
-  openedBy: ZenTaoUser;
+  openedBy: ZendaoUser;
   openedDate: string;
-  reviewedBy: ZenTaoUser | null;
+  reviewedBy: ZendaoUser | null;
   reviewedDate: string | null;
-  lastEditedBy: ZenTaoUser | null;
+  lastEditedBy: ZendaoUser | null;
   lastEditedDate: string | null;
   version: number;
   linkCase: string;
@@ -1263,7 +1263,7 @@ export interface TestTask {
   /** 类型 */
   type: TestTaskType;
   /** 负责人 */
-  owner: ZenTaoUser | string | null;
+  owner: ZendaoUser | string | null;
   /** 优先级 */
   pri: number;
   /** 开始日期 */
@@ -1407,15 +1407,15 @@ export interface Story {
   stage: StoryStage;
   stagedBy: string;
   mailto: string;
-  openedBy: ZenTaoUser | string;
+  openedBy: ZendaoUser | string;
   openedDate: string;
-  assignedTo: ZenTaoUser | string;
+  assignedTo: ZendaoUser | string;
   assignedDate: string;
-  lastEditedBy: ZenTaoUser | string;
+  lastEditedBy: ZendaoUser | string;
   lastEditedDate: string | null;
-  reviewedBy: ZenTaoUser | string;
+  reviewedBy: ZendaoUser | string;
   reviewedDate: string | null;
-  closedBy: ZenTaoUser | string;
+  closedBy: ZendaoUser | string;
   closedDate: string | null;
   closedReason: string;
   toBug: number;
@@ -1569,13 +1569,13 @@ export interface Product {
   status: string;
   subStatus: string;
   desc: string;
-  PO: ZenTaoUser | null;
-  QD: ZenTaoUser | null;
-  RD: ZenTaoUser | null;
+  PO: ZendaoUser | null;
+  QD: ZendaoUser | null;
+  RD: ZendaoUser | null;
   acl: ProductAcl | string;
-  whitelist: ZenTaoUser[];
+  whitelist: ZendaoUser[];
   reviewer: string;
-  createdBy: ZenTaoUser;
+  createdBy: ZendaoUser;
   createdDate: string;
   createdVersion: string;
   order: number;

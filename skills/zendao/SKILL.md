@@ -1,18 +1,18 @@
 ---
 name: zendao
-version: 1.1.1
+version: 1.1.2
 description: >-
-  Query and manage ZenTao (禅道) programs, projects, products, stories,
+  Query and manage Zendao (禅道) programs, projects, products, stories,
   tasks, bugs and testcases, plus read-only testtask and user queries, via
-  bundled CLI scripts. Use when the user mentions 禅道, ZenTao, Zendao,
-  项目集, 项目, 执行/execution, 迭代/sprint, 需求/story, 任务, Bug, 用例,
-  测试用例, 测试单/testtask, 产品, or needs to list/create/update/delete
-  ZenTao entities through this project's API scripts. Not for ZenTao web
-  UI automation (页面点击/截图), report or metrics dashboards (报表/度量统计),
-  or non-ZenTao project tools such as Jira, TAPD or 飞书项目.
+  bundled CLI scripts. Use when the user mentions 禅道, Zendao, 项目集,
+  项目, 执行/execution, 迭代/sprint, 需求/story, 任务, Bug, 用例, 测试用例,
+  测试单/testtask, 产品, or needs to list/create/update/delete Zendao
+  entities through this project's API scripts. Not for Zendao web UI
+  automation (页面点击/截图), report or metrics dashboards (报表/度量统计),
+  or non-Zendao project tools such as Jira, TAPD or 飞书项目.
 ---
 
-# 禅道 (ZenTao)
+# 禅道 (Zendao)
 
 通过本技能自带的 CLI 脚本调用禅道 REST API。不要手写 HTTP 请求；优先执行下方脚本。
 
@@ -43,7 +43,7 @@ description: >-
    - **用户级（推荐，全局生效）**：在用户的 Shell 配置（如 `~/.zshrc`）中追加：
 
 ```bash
-# 禅道 (ZenTao) API 配置
+# 禅道 (Zendao) API 配置
 export ZENDAO_API_BASE_URL="https://your-zendao-host/api.php/v1"  # REST API 根地址
 export ZENDAO_ACCOUNT="your-account"                               # 登录账号
 export ZENDAO_PASSWORD="your-password"                             # 登录密码
