@@ -1215,6 +1215,120 @@ export interface DeleteTestcaseResponse {
   message: string;
 }
 
+/** 测试单状态 */
+export type TestTaskStatus = 'wait' | 'doing' | 'done' | 'blocked' | string;
+
+/** 测试单类型 */
+export type TestTaskType =
+  | 'integrate'
+  | 'system'
+  | 'acceptance'
+  | 'performance'
+  | 'safety'
+  | 'smoke'
+  | string;
+
+/** 测试单 */
+export interface TestTask {
+  id: number;
+  /** 所属项目 */
+  project: number;
+  /** 所属产品 */
+  product: number;
+  /** 测试单名称 */
+  name: string;
+  /** 所属执行 */
+  execution: number;
+  /** 所属版本 */
+  build: number | string;
+  /** 类型 */
+  type: TestTaskType;
+  /** 负责人 */
+  owner: ZenTaoUser | string | null;
+  /** 优先级 */
+  pri: number;
+  /** 开始日期 */
+  begin: string;
+  /** 结束日期 */
+  end: string;
+  /** 实际完成日期 */
+  realFinishedDate: string | null;
+  /** 抄送给 */
+  mailto: string | null;
+  /** 描述 */
+  desc: string;
+  /** 测试报告 */
+  report: string | null;
+  /** 状态（wait 未开始 | doing 进行中 | done 已关闭 | blocked 被阻塞） */
+  status: TestTaskStatus;
+  /** 关联的测试报告 ID */
+  testreport: number;
+  auto: string;
+  subStatus: string;
+  /** 创建人 */
+  createdBy?: string;
+  /** 创建日期 */
+  createdDate?: string;
+  deleted: string | boolean;
+  /** 是否为多人任务 */
+  multiple?: string | boolean;
+  /** 所属分支 */
+  branch: number | string;
+  /** 所属产品名称 */
+  productName?: string;
+  /** 所属项目名称 */
+  projectName?: string;
+  /** 所属执行名称 */
+  executionName?: string;
+  /** 所属版本名称 */
+  buildName?: string;
+}
+
+/** 获取测试单列表查询参数 */
+export interface GetTesttasksParams {
+  page?: number | string;
+  limit?: number | string;
+  /** 排序，默认 id_desc */
+  order?: string;
+  /** 所属产品 */
+  product?: number | string;
+  /** 所属分支 */
+  branch?: number | string;
+}
+
+/** 获取测试单列表响应 */
+export interface GetTesttasksResponse {
+  page: number;
+  total: number;
+  limit: number;
+  testtasks: TestTask[];
+}
+
+/** 测试单详情（含附件与关联用例执行信息） */
+export interface TestTaskDetail extends TestTask {
+  /** 产品类型 */
+  productType?: string;
+  /** 附件 */
+  files?: unknown[];
+  /** 关联用例及执行情况 */
+  testcases?: TestTaskCase[];
+}
+
+/** 测试单下的用例（含执行指派与结果） */
+export interface TestTaskCase extends TestCase {
+  /** 所属测试单 ID */
+  task: number;
+  /** 用例 ID */
+  case: number;
+  /** 执行指派人 */
+  assignedTo: string;
+  /** 用例版本 */
+  caseVersion: number;
+}
+
+/** 获取测试单详情响应 */
+export type GetTesttaskResponse = TestTaskDetail;
+
 /** 需求来源 */
 export type StorySource =
   | 'customer'

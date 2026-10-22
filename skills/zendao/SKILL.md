@@ -2,10 +2,11 @@
 name: zendao
 description: >-
   Query and manage ZenTao (禅道) programs, projects, products, stories,
-  tasks, bugs, testcases, and users via bundled CLI scripts. Use when the user
-  mentions 禅道, ZenTao, Zendao, 项目集, 项目, 执行/execution, 需求/story, 任务,
-  Bug, 用例, 测试用例, 产品, or needs to list/create/update/delete ZenTao
-  entities through this project's API scripts.
+  tasks, bugs, testcases, testtasks, and users via bundled CLI scripts. Use
+  when the user mentions 禅道, ZenTao, Zendao, 项目集, 项目, 执行/execution,
+  需求/story, 任务, Bug, 用例, 测试用例, 测试单/testtask, 产品, or needs to
+  list/create/update/delete ZenTao entities through this project's API
+  scripts.
 ---
 
 # 禅道 (ZenTao)
@@ -96,6 +97,9 @@ ZENDAO_TOKEN=
 | 创建用例 | `node dist/testcase/createTestcase.mjs <productId> '<jsonBody>'` |
 | 修改用例 | `node dist/testcase/updateTestcase.mjs <testcaseId> '<jsonBody>'` |
 | 删除用例 | `node dist/testcase/deleteTestcase.mjs <testcaseId>` |
+| 测试单列表 | `node dist/testtask/getTesttasks.mjs [page] [limit] [order] [productId] [branch]` |
+| 项目测试单列表 | `node dist/testtask/getProjectTesttasks.mjs <projectId>` |
+| 测试单详情 | `node dist/testtask/getTesttask.mjs <testtaskId>` |
 | 产品 Bug 列表 | `node dist/bug/getBugs.mjs <productId>` |
 | Bug 详情 | `node dist/bug/getBug.mjs <bugId>` |
 | 创建 Bug | `node dist/bug/createBug.mjs <productId> '<jsonBody>'` |
@@ -283,6 +287,22 @@ node dist/bug/closeBug.mjs 1 '{"comment":"验证通过，关闭"}'
 
 > 注意：解决 / 激活 / 关闭均为即时生效的写操作，执行前确认 Bug ID 与备注内容无误；每次调用都会新增一条对应的历史记录。
 
+## 测试单
+
+测试单为只读接口（列表 / 项目下列表 / 详情）。
+
+`status` 取值：`wait`（未开始） | `doing`（进行中） | `done`（已关闭） | `blocked`（被阻塞）。
+
+`type` 取值：`integrate`（集成测试） | `system`（系统测试） | `acceptance`（验收测试） | `performance`（性能测试） | `safety`（安全测试） | `smoke`（冒烟测试）。
+
+详情响应额外包含 `testcases`：关联用例及其执行指派（`assignedTo`）、最近执行结果（`lastRunResult`）等。
+
+```bash
+node dist/testtask/getTesttasks.mjs 1 20 id_desc 135   # 按产品筛选
+node dist/testtask/getProjectTesttasks.mjs 142
+node dist/testtask/getTesttask.mjs 615
+```
+
 ## ID 与概念
 
 | 概念 | 说明 |
@@ -295,6 +315,7 @@ node dist/bug/closeBug.mjs 1 '{"comment":"验证通过，关闭"}'
 | task | 任务；详情/改删用任务 ID |
 | bug | Bug；创建挂在产品下，详情/改删/解决/激活/关闭用 Bug ID |
 | testcase | 用例；创建挂在产品下，详情/修改/删除用用例 ID |
+| testtask | 测试单；列表可按产品/分支筛选或挂在项目下，详情（含关联用例执行情况）用测试单 ID |
 | user | 用户；指派用 **account**，不是 realname |
 
 不知道 ID 时：先查列表（products / programs / projects / stories / tasks / users），再对具体 ID 操作。
