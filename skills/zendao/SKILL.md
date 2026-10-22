@@ -16,17 +16,28 @@ description: >-
 
 ## 前置条件
 
-已安装 Node.js（建议 18+）。脚本从**当前工作目录**读取 `.env.local` 或 `.env`（不是技能目录）。
+已安装 Node.js（建议 18+）。配置按以下优先级读取：**用户 Shell 环境变量（如 `~/.zshrc` 中 export 的 `ZENDAO_*`）> 当前工作目录的 `.env.local` > 当前工作目录的 `.env`**（注意：`.env` 文件从 cwd 读取，不是技能目录）。
 
 ## 首次配置（缺失时必做）
 
-在执行任何业务脚本前，先完成下列检查；配置缺失时不要猜测默认地址或账号，必须先引导用户写好文件。
+在执行任何业务脚本前，先完成下列检查；配置缺失时不要猜测默认地址或账号，必须先引导用户写好配置。
 
-1. **检查**：在 cwd 查找 `.env.local` 或 `.env`，确认至少具备：
+1. **检查**：先检查 Shell 环境变量（`env | grep ZENDAO`），再在 cwd 查找 `.env.local` 或 `.env`，确认至少具备：
    - `ZENDAO_API_BASE_URL`（禅道 REST API 根路径，形如 `https://host/api.php/v1`）
    - `ZENDAO_ACCOUNT` + `ZENDAO_PASSWORD`（或已可用的 `ZENDAO_TOKEN`）
-2. **询问**：若文件不存在或必填项为空，向用户索取 API 地址、账号、密码（Token 可选）。不要在回复中回显密码。
-3. **写入**：在 cwd 创建或更新 `.env.local`（优先于 `.env`）：
+2. **询问**：若配置不存在或必填项为空，向用户索取 API 地址、账号、密码（Token 可选）。不要在回复中回显密码。
+3. **写入**（二选一，优先推荐用户级环境变量）：
+   - **用户级（推荐，全局生效）**：在用户的 Shell 配置（如 `~/.zshrc`）中追加：
+
+```bash
+# 禅道 (ZenTao) API 配置
+export ZENDAO_API_BASE_URL="https://your-zendao-host/api.php/v1"  # REST API 根地址
+export ZENDAO_ACCOUNT="your-account"                               # 登录账号
+export ZENDAO_PASSWORD="your-password"                             # 登录密码
+export ZENDAO_TOKEN=""                                             # 可选：已有 Token 时直接复用
+```
+
+   - **项目级（仅当前目录生效）**：在 cwd 创建或更新 `.env.local`（优先于 `.env`）：
 
 ```bash
 ZENDAO_API_BASE_URL=https://your-zendao-host/api.php/v1
